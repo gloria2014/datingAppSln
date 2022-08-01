@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="#">Dating App</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="accountService.currentUser$ |async">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Coincidencias</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Lista</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Mensajes</a>
+          </li>
+         
+        </ul>
+      
+        <div class="dropdown" *ngIf="accountService.currentUser$ |async" dropdown>
+            <a class="dropdown-toggle text-light" dropdownToggle>Bienvenido Usuario</a>
+            <div class="dropdown-menu mt-3" *dropdownMenu>
+                <a class="dropdown-item">Edit Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" (click)="logout()">Logout</a>
+            </div>
+        </div>
+
+        <form *ngIf="(accountService.currentUser$ |async) === null" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" autocomplete="off">
+          <input class="form-control me-2" 
+          type="text" 
+          placeholder="Usuario"
+          name="Username"
+          [(ngModel)]="model.Username"
+          >
+          <input class="form-control me-2" 
+          type="password" 
+          placeholder="Clave"
+          name="password"
+          [(ngModel)]="model.password">
+          <button class="btn btn-outline-success" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </nav>

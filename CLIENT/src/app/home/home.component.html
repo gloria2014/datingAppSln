@@ -1,0 +1,25 @@
+<div class="container mt-5">
+    <div *ngIf="!registerMode" style="text-align:center;">
+        <h1>Find your match</h1>
+        <p class="lead">xxxxxxxxxxxxxxxxxxxxxx</p>
+        <div class="center">
+            <button (click)="registerToggle()" class="btn btn-primary btn-lg">registro</button>
+            <button class="btn btn-info btn-lg">Saber mas</button>
+        </div>
+    </div>
+</div>
+
+<div class="container" *ngIf="registerMode">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <!-- <p>registrar forms goes here</p> -->
+            <!-- en este caso el componente home es padre del componente registro
+            y [usersFromHomeComponent]significa que registro esta recibiendo datos de un padre(por los corchetes) 
+         y el hijo (registro) envia datos al padre que va en parentesis -->
+            
+          <!-- <app-register [usersFromHomeComponent]="users" (cancelRegister)="cancelRegisterMode($parametroEvento)"></app-register> -->
+            <app-register (cancelRegister)="cancelRegisterMode($parametroEvento)"></app-register>
+        
+        </div>
+    </div>
+</div>
