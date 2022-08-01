@@ -1,0 +1,19 @@
+
+SUBIR PROYECTO X PRIMERA VEZ
+1. crear repository en github
+
+2. crear carpeta vacia 
+
+3. copiar el fuente
+
+4 desde la carpeta del proyecto abrir git bash
+5 ejecutar las sigienes lieneas en el sigueite oreden
+git init
+
+git add .
+
+git commit -m "first commit"
+
+git remote add origin https://github.com/NOMBRE_USUARIO/NOMBRE_PROYECTO.git
+
+git push -u origin master
