@@ -1,5 +1,6 @@
 
 SUBIR PROYECTO X PRIMERA VEZ
+----------------------------------------
 1. crear repository en github
 
 2. crear carpeta vacia 
@@ -17,3 +18,11 @@ git commit -m "first commit"
 git remote add origin https://github.com/NOMBRE_USUARIO/NOMBRE_PROYECTO.git
 
 git push -u origin master
+
+PARA SUBIR CAMBIOS POSTERIORES DESDE VISUAL CODE
+------------------------------------------------
+1. clic en control de codigo fuente
+2. ingresar mensaje
+3. cclic en los 3 putnyitos clci en condirmar o commit
+4. push o insertar en y selccioanr la ruta del repositorio de github
+

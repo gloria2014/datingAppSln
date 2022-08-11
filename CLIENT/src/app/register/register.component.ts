@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Event } from 'ngx-bootstrap/utils/facade/browser';
+import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../_services/account.service';
 
 
@@ -11,11 +12,12 @@ import { AccountService } from '../_services/account.service';
 export class RegisterComponent implements OnInit {
   /* decorador de entrada @Input() */
   // @Input() usersFromHomeComponent:any; // aca el @Input() recibirá todos los datos del compnente home
- /* decorador de salida */
+ 
+  /* decorador de salida */
   @Output() cancelRegister = new EventEmitter();
   model:any = {};
 
-  constructor(private cuentaServicio:AccountService) { }
+  constructor(private cuentaServicio:AccountService, private toastr:ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -25,6 +27,7 @@ register(){
     this.cancel();
   }, error =>{
     console.log(error);
+    this.toastr.error(error.error);
   }
   )
 }
