@@ -31,10 +31,11 @@ export class NavComponent implements OnInit {
       //console.log(response);
       //this.loggedIn = true;
       this.router.navigateByUrl('/members');
-    }, error =>{
-      console.log(error);
-      this.toastr.error(error.error);
-    })  
+       } //, error =>{ leccion 82 se quita esta validación porque ya existe una en el interceptor
+    //   console.log("error del btn login :: " + error);
+    //   this.toastr.error(error.error);
+    // }
+    )  
   }
   logout(){
     this.accountService.logout(); 
