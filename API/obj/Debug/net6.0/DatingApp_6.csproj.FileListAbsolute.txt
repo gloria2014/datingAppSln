@@ -570,3 +570,6 @@ C:\Users\Gloria\Desktop\Udemy\local_DatingApp\API\obj\Debug\net6.0\refint\Dating
 C:\Users\Gloria\Desktop\Udemy\local_DatingApp\API\obj\Debug\net6.0\DatingApp_6.pdb
 C:\Users\Gloria\Desktop\Udemy\local_DatingApp\API\obj\Debug\net6.0\DatingApp_6.genruntimeconfig.cache
 C:\Users\Gloria\Desktop\Udemy\local_DatingApp\API\obj\Debug\net6.0\ref\DatingApp_6.dll
+C:\Users\Gloria\Desktop\Udemy\local_DatingApp\API\bin\Debug\net6.0\Data\UserSeedData.json
+C:\Users\Gloria\Desktop\Udemy\local_DatingApp\API\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Gloria\Desktop\Udemy\local_DatingApp\API\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

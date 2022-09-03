@@ -33,20 +33,39 @@ namespace DatingApp_6.Controllers
 
             /* la clase HMACSHA512() proporciona el algoritmo para crear el hash */
             using var hmac = new HMACSHA512();
-
-            var user = new AppUser
+            try
             {
-                UserName = registerDto.Username.ToLower(),
-                PaswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
-            };
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+                var user = new AppUser
+                {
+                    UserName = registerDto.Username.ToLower(),
+                    PaswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+                    PasswordSalt = hmac.Key,
+                    DateOfBirth = registerDto.DateOfBirth,
+                    City = registerDto.City,
+                    Country = registerDto.Country,
+                    Gender = registerDto.Gender,
+                    KnownAs = registerDto.KnownAs,
+                    Created = registerDto.Created,
+                    LastActive = registerDto.LastActive,
+                    Introduction = registerDto.Introduction,
+                    LookingFor = registerDto.LookingFor,
+                    Interests  = registerDto.Interests
+                };
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-            return new UserDto {
-                Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
+                return new UserDto
+                {
+                    Username = user.UserName,
+                    Token = _tokenService.CreateToken(user)
+                };
+            }
+            catch (Exception ex)
+            {
+
+                throw ex.InnerException;
+            }
+            
         }
 
         private async Task<bool> UserExists(string username)

@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "1K8j9JkTnxAVgxn2BTfbtjEVi0ztLzhBdrBSRbGrNxQGU4qYnKLL6CM0yG+yN6vycBc5uIm56nTpyLOtp4iUHw==",
+  "dgSpecHash": "hL8JMi6bsFOY9cklW40pxXyuR2Mcl3OEwWuIGfJOeUQp9VGHqXubDx+hSiofiisCyBp+j2qIABiFQrh40mQfRw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Gloria\\Desktop\\Udemy\\local_DatingApp\\API\\DatingApp_6.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Gloria\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
+    "C:\\Users\\Gloria\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\azure.core\\1.20.0\\azure.core.1.20.0.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\azure.identity\\1.5.0\\azure.identity.1.5.0.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\fluentvalidation\\11.1.0\\fluentvalidation.11.1.0.nupkg.sha512",
@@ -37,7 +39,7 @@
     "C:\\Users\\Gloria\\.nuget\\packages\\microsoft.codeanalysis.visualbasic.workspaces\\4.0.0\\microsoft.codeanalysis.visualbasic.workspaces.4.0.0.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\microsoft.codeanalysis.workspaces.common\\4.0.0\\microsoft.codeanalysis.workspaces.common.4.0.0.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\microsoft.codeanalysis.workspaces.msbuild\\4.0.0\\microsoft.codeanalysis.workspaces.msbuild.4.0.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\Gloria\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.0-preview2.22096.2\\microsoft.data.sqlclient.5.0.0-preview2.22096.2.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.0.0-preview2.22084.1\\microsoft.data.sqlclient.sni.runtime.5.0.0-preview2.22084.1.nupkg.sha512",
     "C:\\Users\\Gloria\\.nuget\\packages\\microsoft.diasymreader\\1.3.0\\microsoft.diasymreader.1.3.0.nupkg.sha512",

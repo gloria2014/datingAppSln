@@ -1,16 +1,13 @@
-﻿using DatingApp_6.Extensions;
-
-namespace DatingApp_6.Entities
+﻿namespace DatingApp_6.DTOs
 {
-    public class AppUser
+    public class MemberDto
     {
         public int Id { get; set; }
         public string? UserName { get; set; }
-        public byte[] PaswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string  PhotoUrl { get; set; }
+        public int  Age { get; set; }
         public string KnownAs { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Created { get; set; } 
         public DateTime LastActive { get; set; }
         public string Gender { get; set; }
         public string Introduction { get; set; }
@@ -18,13 +15,6 @@ namespace DatingApp_6.Entities
         public string Interests { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-        public ICollection<Photo> Photos { get; set; }
-
-        public int GetAge()
-        {
-            return DateOfBirth.CalculateAge();
-        }
-
+        public ICollection<PhotoDto> Photos { get; set; }
     }
 }
-

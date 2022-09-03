@@ -1,4 +1,5 @@
 ﻿using DatingApp_6.Data;
+using DatingApp_6.Helpers;
 using DatingApp_6.Interfaces;
 using DatingApp_6.Services;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +11,11 @@ namespace DatingApp_6.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
-           services.AddDbContext<DataContext>(options =>
+            services.AddDbContext<DataContext>(options =>
            {
                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
