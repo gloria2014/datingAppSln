@@ -1,1 +1,57 @@
-<p>member-detail works!</p>
+<div class="row" *ngIf="memberdetalle">
+    <div class="col-4">
+        <div class="card">
+            <img src="{{memberdetalle.photoUrl || './assets/user.png'}}" alt="{{memberdetalle.knownAs}}"
+                class="card-img-top img-thumbnail">
+
+            <div class="card-body">
+                <div>
+                    <strong>Location:</strong>
+                    <p>{{memberdetalle.city}}, {{memberdetalle.country}}</p>
+                </div>
+                <div>
+                    <strong>Age:</strong>
+                    <p>{{memberdetalle.age}}</p>
+                </div>
+                <div>
+                    <strong>Last Active:</strong>
+                    <p>{{memberdetalle.lastActive}}</p>
+                </div>
+                <div>
+                    <strong>Member since:</strong>
+                    <p>{{memberdetalle.created | date: 'dd MMM yyyy'}}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group d-flex">
+                    <button class="btn btn-primary">Like</button>
+                    <button class="btn btn-success">Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading ='About {{memberdetalle.knownAs}}'>
+                <h4>Description</h4>
+                <p>{{memberdetalle.introduction}}</p>
+                <h4>Looking for:</h4>
+                <p>{{memberdetalle.lookingFor}}</p>
+            </tab>
+            <tab heading='Interests'>
+                <h4>Interests</h4>
+                <p>{{memberdetalle.interests}}</p>
+                
+            </tab>
+            <tab heading="Photos">
+               <!-- <p>aca despues fotos</p> clase 113 -->
+               <ngx-gallery [options]="galleryOptions" [images]="galleryImages"
+               style="display: inline-block; margin-bottom: 20px;"></ngx-gallery>
+            </tab>
+            <tab heading="Messages">
+                <p>aca habra Messages</p>
+            </tab>
+        </tabset>
+       
+    </div>
+</div>

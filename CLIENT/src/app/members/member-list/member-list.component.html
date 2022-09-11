@@ -1,1 +1,15 @@
-<p>member-list works!</p>
+<!-- clase 106 se comenta este div para remplazarlo por la llamada a su hijo
+     memebr-card -->
+     
+<!-- <div class="row">
+    <div class="col-2">
+        <p *ngFor="let item of miembros">{{item.knownAs}}</p> 
+    </div>
+</div> -->
+
+
+<div class="row">
+    <div *ngFor="let item of miembros" class="col-2">
+        <app-member-card [memberpadre]="item"></app-member-card>
+    </div>
+</div>

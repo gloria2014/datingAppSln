@@ -28,7 +28,7 @@ export class NavComponent implements OnInit {
 
   login(){
     this.accountService.login(this.model).subscribe(response =>{
-      //console.log(response);
+      console.log("nav/login ::: " + response);
       //this.loggedIn = true;
       this.router.navigateByUrl('/members');
        } //, error =>{ leccion 82 se quita esta validación porque ya existe una en el interceptor
