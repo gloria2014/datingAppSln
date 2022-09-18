@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 //using System.Data.Entity;
 
 namespace DatingApp_6.Controllers
@@ -16,7 +17,7 @@ namespace DatingApp_6.Controllers
      de clase, esto significa que todos los métodos dej esta clase estan protegidos con autorización
         */
     [Authorize]
-    public class UsersController : BaseApiController
+    public class UsersController  : BaseApiController
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -59,8 +60,24 @@ namespace DatingApp_6.Controllers
         public async Task<ActionResult<MemberDto>> GetUser (string username)
         {
             return await _userRepository.GetMemberAsnyc(username);
-           
         }
 
+        /* clase 120 crea el método UpdateUser() */
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            /* clase 120 obtiene el token */
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // obtiene el objeto usuario
+            var usuario = await _userRepository.GetUserByUserNameAsync(username);
+            // mapea dto a obj
+            _mapper.Map(memberUpdateDto, usuario);
+
+            _userRepository.Update(usuario);
+
+            if (await _userRepository.SaveAllAsync()) return NoContent();
+            
+            return BadRequest();
+        }
     }
 }

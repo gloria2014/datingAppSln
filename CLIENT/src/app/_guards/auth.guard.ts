@@ -7,6 +7,8 @@ import { AccountService } from '../_services/account.service';
 @Injectable({
   providedIn: 'root'
 })
+/* clase 70 se crea un guard para activar la ruta y haci evitar navegar por las pestañas 
+sin autorización */
 export class AuthGuard implements CanActivate {
 
   constructor(private accountService:AccountService, private toastr:ToastrService) {}

@@ -1,0 +1,74 @@
+
+<div *ngIf="memberedita" class="row">
+    <div class="col-4">
+        <h1>Your Profile</h1>
+    </div>
+    <div class="col-8">
+        <!-- clase 118 lo que hace el *ngIf="editForm.dirty" es validar si el form
+        ha sido editado se muestra este div con el mensaje y si no ha realizado ningun cambio
+    este mensaje no se muestra -->
+        <div class="alert alert-info" *ngIf="editForm.dirty">
+            <strong>Information: <p>You have made changes. Any unsaved changes will be lost</p></strong>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <img src="{{memberedita.photoUrl || './assets/user.png'}}" alt="{{memberedita.knownAs}}"
+                class="card-img-top img-thumbnail">
+
+             <div class="card-body">
+                <div>
+                    <strong>Location:</strong>
+                    <p>{{memberedita.city}}, {{memberedita.country}}</p>
+                </div>
+                <div>
+                    <strong>Age:</strong>
+                    <p>{{memberedita.age}}</p>
+                </div>
+                <div>
+                    <strong>Last Active:</strong>
+                    <p>{{memberedita.lastActive}}</p>
+                </div>
+                <div>
+                    <strong>Member since:</strong>
+                    <p>{{memberedita.created | date: 'dd MMM yyyy'}}</p>
+                </div>
+            </div> 
+            <div class="card-footer">
+                <button [disabled]="!editForm.dirty" form="editForm" type="submit" class="btn btn-success btn-block">Save Changes</button>
+            </div>
+        </div>
+    </div>
+     <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading='About {{memberedita.knownAs}}'>
+                <!-- clase 118 1.se convierte el form en form angular: #editForm="ngForm"
+                 2. se agrega el método ng : (ngSubmit)="updateMember()" 
+                 3. se agrega un id al form par uqe sea llamado desde el boton: id="editForm" 
+                 4. el  [disabled]="!editForm.dirty" deshabilita el boton si no ha moficado
+                 5. IMPORTANTE: el value del name debe ser igual al nombre de la propiedad del objeto Ejemplo:
+                  [(ngModel)]="memberedita.lookingFor" == name="lookingFor" -->
+                <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
+                    <h4>Description</h4>
+                    <textarea [(ngModel)]="memberedita.introduction" name="introduction" rows="6" class="form-control"></textarea>
+                    <h4 class="mt-2">Looking for:</h4>
+                    <textarea [(ngModel)]="memberedita.lookingFor" name="lookingFor" rows="6" class="form-control"></textarea>
+                    <h4 class="mt-2">Interests:</h4>
+                    <textarea [(ngModel)]="memberedita.interests" name="interests" rows="6" class="form-control"></textarea>
+                    <h4 class="mt-2">Location Details:</h4>
+                    <div class="form-inline">
+                        <label for="city">City</label>
+                        <input [(ngModel)]="memberedita.city" class="form-control mx-2" type="text" name="city">
+                        <label for="country">Country</label>
+                        <input [(ngModel)]="memberedita.country" class="form-control mx-2" type="text" name="country">
+                    </div>
+                </form>
+            </tab>
+            <tab heading='Edit Photos'>
+                <p>photos wil edit here</p>
+            </tab>
+           
+        </tabset>
+
+    </div> 
+</div>

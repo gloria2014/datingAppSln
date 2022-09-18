@@ -1,15 +1,8 @@
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
-
-// calse 104 se agrega constante para obtener el token temporalmente
-// const httpOptions = {
-//   headers : new HttpHeaders({
-//     Authorization : 'Bearer ' + JSON.parse(localStorage.getItem('user')).token 
-//   })
-  
-// }
 
 @Injectable({
   providedIn: 'root'
@@ -25,21 +18,48 @@ export class MembersService {
   //   })
   // };
 
+  /* clase 123 se mejora el loding*/
+  membersObs:Member[] = [];
+
   constructor(private http:HttpClient) { }
 
- 
-
   getMembers(){
-    // clase 109,  return this.http.get<Member[]>(this.baseUrl + 'users',this.httpOptions);
-    return this.http.get<Member[]>(this.baseUrl + 'users');
+    // clase 109, 
+    // retorna un objeto.- return this.http.get<Member[]>(this.baseUrl + 'users',this.httpOptions);
+   
+    /* clase 123 ahora se devuelve un observable. para eso se aggrega condicional if */
+    if(this.membersObs.length > 0) return of(this.membersObs);
+
+    // clase 123 si no hay membersObs entonces va a la api y trae la data en observable 
+    return this.http.get<Member[]>(this.baseUrl + 'users').pipe(
+      map(memberMap => {
+          this.membersObs = memberMap;
+          return this.membersObs;
+      })
+    )
   }
 
   getMember(username:string){
     console.log("memberService :: " + username);
     // clase 109,  return this.http.get<Member>(this.baseUrl + "users/" + username, this.httpOptions);
-     return this.http.get<Member>(this.baseUrl + "users/" + username);
+     
+    /* clase 123 obtiene un member de la lista membersObs */
+    const member = this.membersObs.find( x => x.username === username);
+    if(member !== undefined)return of(member);
 
-    //return this.http.get<Member>(this.baseUrl + "users/ana");
+    return this.http.get<Member>(this.baseUrl + "users/" + username);
   }
   
+  /* clase 121 se crea el método update */
+  updateMember(memberParam: Member){
+    //return this.http.put(this.baseUrl + "users", memberParam);
+
+    /* clase 123 se agrega el pipe */
+    return this.http.put(this.baseUrl + "users", memberParam).pipe(
+      map(() => {
+        const index = this.membersObs.indexOf(memberParam);
+        this.membersObs[index] = memberParam;
+      })
+    )
+  }
 }
