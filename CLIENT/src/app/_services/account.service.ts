@@ -26,8 +26,8 @@ export class AccountService {
       map((response: User)=>{
         const user = response;
         if(user){
-          //localStorage.setItem('user', JSON.stringify(user));
           // this.currentUserSource.next(user);
+          /* clase 136 se cambia la llamada a est afuncion -> setCurrentUser() */
           this.setCurrentUser(user);
           console.log("accountService/login :::: " + JSON.stringify(user));
           
@@ -35,9 +35,11 @@ export class AccountService {
       })
     );
   }
-
-  setCurrentUser(user:User){
-    this.currentUserSource.next(user);
+  
+  /* clase 136 usaremos este método para configurar al usuario actual. se agrega aqui el localstorage del user */
+  setCurrentUser(usuario:User){
+    localStorage.setItem("usuario2",JSON.stringify(usuario));
+    this.currentUserSource.next(usuario);
   }
 
   logout(){
@@ -48,8 +50,9 @@ export class AccountService {
       return this.http.post(this.baseUrl+"account/register",model).pipe(
         map((usuario: User)=>{
           if(usuario){
-              localStorage.setItem("usuario2",JSON.stringify(usuario));
-              this.currentUserSource.next(usuario);
+             // this.currentUserSource.next(usuario);
+               /* clase 136 se comenta la linea de arriba y se cambia la llamada a est afuncion -> setCurrentUser() */
+          this.setCurrentUser(usuario);
           }
           return usuario;
         })

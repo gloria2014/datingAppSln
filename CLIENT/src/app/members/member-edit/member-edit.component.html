@@ -65,7 +65,10 @@
                 </form>
             </tab>
             <tab heading='Edit Photos'>
-                <p>photos wil edit here</p>
+                <!-- <p>photos wil edit here</p>  clase 132 se comenta y se redirecciona
+                a su padre [padreMemberEditaFoto] corchetes significa que recibe los datos -->
+                <app-photo-editor [padreMemberEditaFoto]="memberedita"></app-photo-editor>
+               
             </tab>
            
         </tabset>
