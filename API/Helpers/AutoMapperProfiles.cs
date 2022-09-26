@@ -21,8 +21,13 @@ namespace DatingApp_6.Helpers
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge()))
                 ;
             CreateMap<Photo, PhotoDto>();
-            /* clase 120 se mapea el updateDto a UserApp */
+
+            /* clase 120 se mapea de updateDto a UserApp */
             CreateMap<MemberUpdateDto, AppUser>();
+
+            /* clase 150 se mapea de registroDto a Apuser*/
+            CreateMap<RegisterDto, AppUser>();
+            
 
         }
     }

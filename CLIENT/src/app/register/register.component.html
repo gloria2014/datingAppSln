@@ -1,10 +1,22 @@
-<form #registerForm="ngForm" (click)="register()" autocomplete="off">
-    <h2 class="text-center text-primary">Sign up</h2>
+
+<!-- clase 142  se remplaza la referencia "#registerForm="ngForm" por una propiedad 
+de entrada "[formGroup]="formularioRegistro" porque ahora estamos trabajando con formularios reactivos  
+
+clase 146 se comenta todo losdiv form-group y se lleva la funcionalidad de validación al compomente text-input
+-->
+<form [formGroup]="formularioRegistro" (click)="register()" autocomplete="off">
+    <h2 class="text-center text-primary">Registro</h2>
     <hr>
-    <div class="form-group mb-2">
-        <input type="text" class="form-control" name="username"
-        [(ngModel)]="model.username" placeholder="Nombre Usuario">
-    </div>
+    <!-- <div class="form-group mb-2">
+        <input [class.is-invalid]="formularioRegistro.get('username').errors
+         && formularioRegistro.get('username').touched"
+         type="text" 
+         class="form-control" 
+         formControlName="username"
+         placeholder="Nombre Usuario">
+        <div class="invalid-feedback">Por favor ingrese usuario </div>
+    </div> -->
+
     <!-- <div class="form-group" style="margin:.2em;">
         <label>who is your favorite user?</label>
         <select class="form-control">
@@ -26,12 +38,82 @@
         </ul>
       </div> -->
 
+
+    <!-- <div class="form-group">
+        <input  [class.is-invalid]="formularioRegistro.get('password').errors
+        && formularioRegistro.get('password').touched"
+        type="password" 
+        class="form-control"
+         formControlName="password"
+         placeholder="Contraseña">
+         <div *ngIf="formularioRegistro.get('password').hasError('required')"
+         class="invalid-feedback">Por favor ingrese una contraseña</div>
+         <div *ngIf="formularioRegistro.get('password').hasError('minlength')"
+         class="invalid-feedback">Clave debe tener minímo 2 caracteres</div>
+         <div *ngIf="formularioRegistro.get('password').hasError('maxlength')"
+         class="invalid-feedback">Clave debe tener máximo 4 caracteres</div>
+    </div> -->
+    <!-- <div class="form-group">
+        <input [class.is-invalid]="formularioRegistro.get('confirmPassword').errors
+        && formularioRegistro.get('confirmPassword').touched"
+        type="password"
+         class="form-control" 
+         formControlName="confirmPassword"
+         placeholder="Confirme Contraseña">
+         <div *ngIf="formularioRegistro.get('confirmPassword').hasError('required')"
+         class="invalid-feedback">Por favor ingrese Confirmar contraseña</div>
+         <div *ngIf="formularioRegistro.get('confirmPassword').hasError('coincidirCon')"
+         class="invalid-feedback">Claves deben coincidir</div>
+    </div> -->
+
     <div class="form-group">
-        <input type="password" class="form-control" name="password"
-        [(ngModel)]="model.password" placeholder="Contraseña">
+        <label class="control-label" style="margin-right:10px;">Soy: </label>
+        <label class="radio-inline">
+            <input type="radio" value="male" formControlName="gender">Hombre
+        </label>
+        <label class="radio-inline">
+            <input type="radio" value="female" formControlName="gender">Mujer
+        </label>
     </div>
+
+    <app-text-input [formControl]="formularioRegistro.controls['username']"
+    [label]="'Nombre Usuario'"></app-text-input>
+
+     <app-text-input [formControl]="formularioRegistro.controls['knownAs']" 
+     [label]="'Conocido como'"></app-text-input>
+
+     <app-date-input [formControl]="formularioRegistro.controls['dateOfBirth']"
+      [labelCalendario]="'Fecha Nac.'" [fechaMaxima]="fechaLimite" >       
+     </app-date-input>
+
+     <app-text-input [formControl]="formularioRegistro.controls['city']" 
+     [label]="'Ciudad'" [type]="'text'"></app-text-input>
+
+     <app-text-input [formControl]="formularioRegistro.controls['country']"
+      [label]="'Pais'" [type]="'text'" ></app-text-input>
+
+    <app-text-input [formControl]="formularioRegistro.controls['password']" [label]="'Contraseña'"
+     [type]="'password'"></app-text-input>
+
+    <app-text-input [formControl]="formularioRegistro.controls['confirmPassword']" 
+    [label]="'Confirme contraseña'" [type]="'password'"></app-text-input>
+
+    <div class="row" *ngIf="validacionErrores.length > 0">
+        <ul class="text-danger">
+            <li *ngFor="let error of validacionErrores">
+                {{error}}
+            </li>
+        </ul>
+   </div>
+
     <div class=" form-group text-center">
-       <button class="btn btn-success" style="margin:.2em;" type="submit">Registrar</button>
+       <button class="btn btn-success" [disabled]="!formularioRegistro.valid"
+            style="margin:.2em;" type="submit"
+       >Registrar</button>
        <button class="btn btn-default" style="margin:.2em;" type="button" (click)="cancel()">Cancelar</button>
     </div>
 </form>
+
+<!-- clase 142 usaremos la interpolacion para mostrar lo que trae el form en formato json -->
+<p> form value: {{formularioRegistro.value | json }}</p>
+<p> form status : {{formularioRegistro.status | json }}</p>

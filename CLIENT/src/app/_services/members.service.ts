@@ -38,6 +38,8 @@ export class MembersService {
       })
     )
   }
+ 
+
 
   getMember(username:string){
     console.log("memberService :: " + username);

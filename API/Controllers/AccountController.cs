@@ -1,4 +1,5 @@
-﻿using DatingApp_6.Data;
+﻿using AutoMapper;
+using DatingApp_6.Data;
 using DatingApp_6.DTOs;
 using DatingApp_6.Entities;
 using DatingApp_6.Interfaces;
@@ -14,17 +15,24 @@ namespace DatingApp_6.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
         private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(DataContext context, ITokenService tokenService)
+        public AccountController(DataContext context, ITokenService tokenService
+            , IMapper mapper)
         {
             _context = context;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             if (await UserExists(registerDto.Username)) return BadRequest("Usuario existe");
+            /* clase 150 aca ahora tenemos todas las propiedades del registroDto que se asiganran 
+               * al objeto AppUser*/
+            var usuario = _mapper.Map<AppUser>(registerDto);
+
 
             /* al usar la declaración del using significa que, cada vez que se utiliza un método de la clase HMACSHA512, 
              * se ejecutará el  método dispose(bool) que libera los recursos utlizados y los no utlizados por esta clase
@@ -35,29 +43,26 @@ namespace DatingApp_6.Controllers
             using var hmac = new HMACSHA512();
             try
             {
-                var user = new AppUser
-                {
-                    UserName = registerDto.Username.ToLower(),
-                    PaswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                    PasswordSalt = hmac.Key,
-                    DateOfBirth = registerDto.DateOfBirth,
-                    City = registerDto.City,
-                    Country = registerDto.Country,
-                    Gender = registerDto.Gender,
-                    KnownAs = registerDto.KnownAs,
-                    Created = registerDto.Created,
-                    LastActive = registerDto.LastActive,
-                    Introduction = registerDto.Introduction,
-                    LookingFor = registerDto.LookingFor,
-                    Interests  = registerDto.Interests
-                };
-                _context.Users.Add(user);
+                /* clase 150 se comenta esta forma de envio y se cmabia por el envio con mapeo */
+                //var user = new AppUser
+                //{
+                //    UserName = registerDto.Username.ToLower(),
+                //    PaswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+                //    PasswordSalt = hmac.Key,
+                //};
+              
+                usuario.UserName = registerDto.Username.ToLower();
+                usuario.PaswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+                usuario.PasswordSalt = hmac.Key;
+
+                _context.Users.Add(usuario);
                 await _context.SaveChangesAsync();
 
                 return new UserDto
                 {
-                    Username = user.UserName,
-                    Token = _tokenService.CreateToken(user)
+                    Username = usuario.UserName,
+                    Token = _tokenService.CreateToken(usuario),
+                    KownAs = usuario.KnownAs
                 };
             }
             catch (Exception ex)
