@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using DatingApp_6.DTOs;
 using DatingApp_6.Entities;
+using DatingApp_6.Helpers;
 using DatingApp_6.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,12 +71,50 @@ namespace DatingApp_6.Data
               .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<MemberDto>> GetMembersAsnyc()
-        {
-            return await _context.Users
+        /* clase 155 se comenta el método  porque se modifica y se crea otro con el mismo nombre */
+        //public async Task<IEnumerable<MemberDto>> GetMembersAsnyc()
+        //{ 
+        //    return await _context.Users
+        //        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+        //        .ToListAsync();
+        //}
+
+        public async Task<PagedList<MemberDto>> GetMembersAsnyc_original(UserParams userParam)
+        {// en la clase 159 se agrega otras validaciones 
+            var query = _context.Users
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .AsNoTracking();
+
+            return await PagedList<MemberDto>.CreateAsync(query,
+                userParam.PageNumber, userParam.PageSize);
         }
+
+        /* clase 159 se modifica el metodo de la clase 155 GetMembersAsnyc-original   */
+        public async Task<PagedList<MemberDto>> GetMembersAsnyc(UserParams userParam)
+        {
+            var query = _context.Users.AsQueryable();
+            query = query.Where(q => q.UserName != userParam.CurrentUserName);
+            query = query.Where(q => q.Gender == userParam.Gender);
+
+            var minDob = DateTime.Today.AddYears(-userParam.MaxAge - 1);
+            var maxDob = DateTime.Today.AddYears(-userParam.MinAge);
+
+            query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
+
+            /* clase 163  se agrega nueva consulta OrderByDescending */
+            query = userParam.OrderBy switch
+            {
+                "created" => query.OrderByDescending(u => u.Created),
+                _ => query.OrderByDescending(u => u.LastActive)
+            };
+
+            return await PagedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(
+                _mapper.ConfigurationProvider).AsNoTracking(),
+                userParam.PageNumber,
+                userParam.PageSize
+                );
+        }
+
 
         public async Task<bool> SaveAllAsync()
         {

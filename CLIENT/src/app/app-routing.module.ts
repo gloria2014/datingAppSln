@@ -9,6 +9,7 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 
 import { MemberListComponent } from './members/member-list/member-list.component';
+import { MemberRecuperaClaveComponent } from './members/member-clave/member-clave.component';
 import { MessagesComponent } from './messages/messages.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChangesGuardGuard } from './_guards/prevent-unsaved-changes-guard.guard';
@@ -24,19 +25,20 @@ const routes: Routes = [
   runGuardsAndResolvers:'always',
   canActivate:[AuthGuard],
   children:[
-    {path:'members', component:MemberListComponent},
-    {path:'members/:username', component: MemberDetailComponent},
+    {path:'members', component:MemberListComponent}
+    ,{path:'members/:username', component: MemberDetailComponent}
     /* clase 116 se agrega la ruta para editar dentro de las rutas protegidas*/
     /* clase 119 se agrega "canDeactive" para controlar la activacion y desactivacion del componente MemberEditComponent */
-    {path:'member/edit',component:MemberEditComponent, canDeactivate:[PreventUnsavedChangesGuardGuard]},
-    {path:'lists', component:ListsComponent},
-    {path:'messages', component:MessagesComponent},
+    ,{path:'member/edit',component:MemberEditComponent, canDeactivate:[PreventUnsavedChangesGuardGuard]}
+    ,{path:'lists', component:ListsComponent}
+    ,{path:'messages', component:MessagesComponent}
   ]
   },
   /* lesson 79 aca se agrega la ruta para llegar a los errores */
   {path:'errors', component:TestErrorsComponent},
   {path:'not-found', component:NotFoundComponent},
   {path:'server-error', component:ServerErrorComponent},
+  {path:'member/clave',component:MemberRecuperaClaveComponent},
   
   /* cuado el usuario escribe cualquier cosa menos una de las rutas que estan definidas aqui, 
   el sistema lo redirecciona al home */

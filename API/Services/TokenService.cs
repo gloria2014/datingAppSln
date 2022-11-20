@@ -18,7 +18,11 @@ namespace DatingApp_6.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                /* clase 165 se cambia username x id y se agrega el name como unique */
+                //new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                
+                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                 new Claim(JwtRegisteredClaimNames.UniqueName,user.UserName)
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

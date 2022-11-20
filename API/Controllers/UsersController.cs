@@ -3,6 +3,7 @@ using DatingApp_6.Data;
 using DatingApp_6.DTOs;
 using DatingApp_6.Entities;
 using DatingApp_6.Extensions;
+using DatingApp_6.Helpers;
 using DatingApp_6.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -34,24 +35,65 @@ namespace DatingApp_6.Controllers
 
         [HttpGet]
         //[AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
-        {
-            // return await _context.Users.ToListAsync();
+        //public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        //{
+        //    // return await _context.Users.ToListAsync();
+        //    try
+        //    {
+        //        var usuario = await _userRepository.GetMembersAsnyc(); //GetUsersAsync();
+        //       // var userToReturn = _mapper.Map<IEnumerable<MemberDto>>(usuario);
+        //        return Ok(usuario);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex.InnerException;
+        //    }
+        //}
+        /*  clase 155 comemtamos el método de arriba "GetUsers()" porque se modfica */
 
+        //public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers_original([FromQuery] UserParams parametros)
+        //{ // en la clase 159 se agregga otras validaciones al me´todo GetUsers
+        //    try
+        //    {
+        //        var lstPaginada = await _userRepository.GetMembersAsnyc(parametros);
+
+        //        Response.AddPaginationHeader(lstPaginada.CurrentPage, lstPaginada.PageSize,
+        //            lstPaginada.TotalCount, lstPaginada.TotalPages);
+
+        //        return Ok(lstPaginada);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex.InnerException;
+        //    }
+        //}
+
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams parametros)
+        {
             try
             {
-                var usuario = await _userRepository.GetMembersAsnyc(); //GetUsersAsync();
-               // var userToReturn = _mapper.Map<IEnumerable<MemberDto>>(usuario);
+                /* clase 159 se valida el género del usuario logeado */
+                var usuario = await _userRepository.GetUserByUserNameAsync(User.GetUsername());
+                 parametros.CurrentUserName = usuario.UserName;
+               
+                if (string.IsNullOrEmpty(parametros.Gender))
+                {
+                    parametros.Gender = usuario.Gender == "male" ? "female" : "male";
+                }
 
-                return Ok(usuario);
+                var lstPaginada = await _userRepository.GetMembersAsnyc(parametros);
+                Response.AddPaginationHeader(lstPaginada.CurrentPage, lstPaginada.PageSize,
+                    lstPaginada.TotalCount, lstPaginada.TotalPages);
+
+                return Ok(lstPaginada);
             }
             catch (Exception ex)
             {
-
                 throw ex.InnerException;
             }
-
         }
+
+
 
         //[Authorize] /* clase 131 agregamos otro parametro Name que será la ruta  */
         [HttpGet("{username}",Name = "GetUser")]
@@ -85,6 +127,21 @@ namespace DatingApp_6.Controllers
 
             if (await _userRepository.SaveAllAsync()) return NoContent();
             
+            return BadRequest();
+        }
+
+        /* clase 165 aca hago un stop para crear el metodo que recupera clave */
+        [HttpPut("recuperaClave")]
+        public async Task<ActionResult> RecuperaClave(MemberUpdateDto memberUpdateDto)
+        {
+            var usuario = await _userRepository.GetUserByUserNameAsync(User.GetUsername());
+
+            _mapper.Map(memberUpdateDto, usuario);
+
+            _userRepository.Update(usuario);
+
+            if (await _userRepository.SaveAllAsync()) return NoContent();
+
             return BadRequest();
         }
 

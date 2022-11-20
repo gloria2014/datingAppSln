@@ -11,7 +11,8 @@ export class ServerErrorComponent implements OnInit {
   constructor(private router:Router) {
     // leccion 83.- se agrega la navegacion para al modulo routing
     const navigation = this.router.getCurrentNavigation();
-    this.error = navigation?.extras?.state?.error;
+    this.error = navigation?.extras?.state?.error; 
+    //this.error = navigation.extras.state.error
    }
 
   ngOnInit(): void {

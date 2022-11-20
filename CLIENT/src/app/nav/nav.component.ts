@@ -37,6 +37,11 @@ export class NavComponent implements OnInit {
     // }
     )  
   }
+
+  recuperarClave(){
+    
+  }
+
   logout(){
     this.accountService.logout(); 
     /*

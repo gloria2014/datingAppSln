@@ -62,7 +62,8 @@ namespace DatingApp_6.Controllers
                 {
                     Username = usuario.UserName,
                     Token = _tokenService.CreateToken(usuario),
-                    KownAs = usuario.KnownAs
+                    KownAs = usuario.KnownAs,
+                    Gender = usuario.Gender
                 };
             }
             catch (Exception ex)
@@ -103,14 +104,18 @@ namespace DatingApp_6.Controllers
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-              ,
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
-                //KnownAs = user.KnownAs,
-                //Gender = user.Gender
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+                KownAs  = user.KnownAs,
+                Gender = user.Gender
             };
 
         }
 
-    }   
+       
+
+
+          
+
+            }   
 }

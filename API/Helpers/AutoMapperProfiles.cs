@@ -13,7 +13,8 @@ namespace DatingApp_6.Helpers
         public AutoMapperProfiles()
         {
             /*
-             clase 98 se agrega un método para obtener la url de la foto y agregarla al ususrio
+             clase 98 se agrega un método para obtener la url de la foto y agregarla al
+            ususrio
              */
             CreateMap<AppUser, MemberDto>()
                 .ForMember(dest => dest.PhotoUrl,opt => opt.MapFrom(

@@ -1,15 +1,80 @@
 <!-- clase 106 se comenta este div para remplazarlo por la llamada a su hijo
      memebr-card -->
-     
 <!-- <div class="row">
     <div class="col-2">
         <p *ngFor="let item of miembros">{{item.knownAs}}</p> 
     </div>
 </div> -->
 
-
-<div class="row">
+<!-- clase 157 se comment porque se cambia de of miembros$ | async a  item of members" -->
+<!-- <div class="row">
     <div *ngFor="let item of miembros$ | async" class="col-2">
         <app-member-card [memberpadre]="item"></app-member-card>
     </div>
+</div>    -->
+
+<!-- clase 162 se agrega filtro con la paginacion -->
+<div class="text-center mt-3">
+    <h2>your matches - {{paginacion?.totalItems}} found </h2>
+</div>
+
+<div class="container mt-3">
+    <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="loadMembers()" autocomplete="off">
+        <div class="form-group">
+            <label> Age from:</label>
+            <input type="number" class="form-control ml-1" style="width:70px;" name="minAge"
+            [(ngModel)]="userParams.minAge">
+        </div>
+        <div class="form-group px-2">
+            <label> Age to:</label>
+            <input type="number" class="form-control ml-1" style="width:70px;" name="maxAge"
+            [(ngModel)]="userParams.maxAge">
+        </div>
+
+        <div class="form-group px-2">
+            <label>Show:</label>
+            <select name="gender" style="width: 130px" [(ngModel)]="userParams.gender" class="form-control ml-1">
+                <option *ngFor="let gender of genderList" [value]="gender.value">
+                    {{gender.display}}
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary ms-1">Apply Filters</button>
+        <button (click)="resetFilters()" type="submit" class="btn btn-info ms-1">reset Filters</button>
+
+        <!--  clase 166 se agrega filtro ultimo activo y new member -->
+        <div class="col">
+            <div class="btn btn-group float-right">
+                <button type="button" class="btn btn-primary" name="orderBy"
+                (click)="loadMembers()" btnRadio="lastActive" [(ngModel)]="userParams.orderBy">
+                    Last Active
+                </button>
+                <button type="button" class="btn btn-primary" name="orderBy"
+                (click)="loadMembers()" btnRadio="created" [(ngModel)]="userParams.orderBy">
+                    Newest Members
+                </button>
+            </div>
+        </div>
+    </form>
+    <!-- fin del filtro de paginación -->
+</div>
+
+<div class="row">
+    <div *ngFor="let item of members" class="col-2">
+        <app-member-card [memberpadre]="item"></app-member-card>
+    </div>
+</div>
+
+<!-- clase 158 se agrega la paginación.  -->
+<div class="d-flex justify-content-center" *ngIf="paginacion">
+    <pagination [boundaryLinks]="true" 
+    [totalItems]="paginacion.totalItems"
+    [itemsPerPage]="paginacion.itemsPerPage"
+    [(ngModel)]="paginacion.currentPage"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+     nextText="&rsaquo;" firstText="&laquo;"
+        lastText="&raquo;">
+
+    </pagination>
 </div>
