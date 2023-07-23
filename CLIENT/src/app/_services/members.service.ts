@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams,  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { NumberValueAccessor } from '@angular/forms';
 import { map, of, pipe, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Clave } from '../_models/clave';
@@ -97,8 +98,6 @@ export class MembersService {
  console.log("clase 168 ::" + Object.values(userParams).join('-')); //esto viene  18-99-1-24-lastActive-male
  
  var response = this.memberCache.get(Object.values(userParams).join('-'));
-
-
  console.log("respuesta getMembers() :: " + response);
 
  if(response){
@@ -197,4 +196,21 @@ export class MembersService {
   deletePhoto(photoId : number){
     return this.http.delete(this.baseUrl + "users/delete-photo/" + photoId);
   }
+
+  /*  clase 175 se agrega estos metodos=  addLike(), getLikes(), para hacer likes de ls alista de usuarios */
+  addLike(username:string){
+    return this.http.post(this.baseUrl + 'likes/' + username,{});
+  }
+  
+
+  /* class 178 obtengo la paginación y le paso al objeto params que se ira a la api */
+  // getLikes(predicate : string){
+  //   return this.http.get<Member[]>(this.baseUrl + 'likes?predicate=' + predicate);
+  // }
+  getLikes(predicate:string, pageNumber: number, pageSize:number){
+    let params = this.getPaginationHeaders(pageNumber,pageSize);
+    params = params.append('predicate',predicate);
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'likes', params);
+  }
+
 }

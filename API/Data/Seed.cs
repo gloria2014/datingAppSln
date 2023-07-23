@@ -7,6 +7,7 @@ using System.Text.Json;
 
 namespace DatingApp_6.Data
 {
+    /* Clase 88 - se crea esta clase  */
     public class Seed
     {
         public static async Task SeedUsers(DataContext context)
