@@ -10,6 +10,7 @@ namespace DatingApp_6.Data
         }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<UserLike> Likes { get; set; }
+        public DbSet <Message> Messages { get; set; }
 
         /* class 171 Se crea el método OnModelCreating, este constructor lo que hace es eliminar 
          * lo que esta en la migrations y manda este
@@ -25,20 +26,30 @@ namespace DatingApp_6.Data
         {
             base.OnModelCreating(builder);
 
-           builder.Entity<UserLike>()
+            builder.Entity<UserLike>()
                 .HasKey(k => new {k.SourceUserId, k.TargetUserId});
            
             builder.Entity<UserLike>()
                 .HasOne(s => s.SourceUser)
                 .WithMany(l => l.LikedUsers)
                 .HasForeignKey(s => s.SourceUserId)
-                .OnDelete(DeleteBehavior.Cascade); // .Cascade
+                .OnDelete(DeleteBehavior.NoAction); // .Cascade
 
             builder.Entity<UserLike>()
                 .HasOne(t => t.TargetUser)
                 .WithMany(l => l.LikedByUsers)
                 .HasForeignKey(t => t.TargetUserId)
-                .OnDelete(DeleteBehavior.Cascade); // NoAction
+                .OnDelete(DeleteBehavior.NoAction); // NoAction
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.MessagesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Sender)
+                .WithMany(m => m.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

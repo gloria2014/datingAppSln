@@ -13,6 +13,7 @@ import { MemberRecuperaClaveComponent } from './members/member-clave/member-clav
 import { MessagesComponent } from './messages/messages.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChangesGuardGuard } from './_guards/prevent-unsaved-changes-guard.guard';
+import { MemberDetailedResolver } from './_resolvers/member-detailed.resolver';
 
 
 const routes: Routes = [
@@ -26,7 +27,7 @@ const routes: Routes = [
   canActivate:[AuthGuard],
   children:[
     {path:'members', component:MemberListComponent}
-    ,{path:'members/:username', component: MemberDetailComponent}
+    ,{path:'members/:username', component: MemberDetailComponent, resolve:{member:MemberDetailedResolver}}
     /* clase 116 se agrega la ruta para editar dentro de las rutas protegidas*/
     /* clase 119 se agrega "canDeactive" para controlar la activacion y desactivacion del componente MemberEditComponent */
     ,{path:'member/edit',component:MemberEditComponent, canDeactivate:[PreventUnsavedChangesGuardGuard]}
