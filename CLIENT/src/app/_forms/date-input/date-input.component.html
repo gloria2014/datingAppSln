@@ -1,0 +1,19 @@
+
+<!-- clase 149 se datepicker que puede ser utilizado por culaquier componente.
+Solo hay que llamarlo desde el html que lo requiera -->
+
+<div class="form-group">
+    <input
+        type="text"
+        [class.is-invalid]="controladorCalendarioInput.touched 
+            && controladorCalendarioInput.invalid"
+        class="form-control"
+        [formControl]="controladorCalendarioInput.control"
+        placeholder="{{labelCalendario}}"
+        bsDatepicker
+        [bsConfig]="bsConfig"
+        [maxDate]="fechaMaxima"
+    >
+    <div *ngIf="controladorCalendarioInput.control.errors?.required"
+        class="invalid-feedback">{{labelNombre}} es requerido</div>
+</div>

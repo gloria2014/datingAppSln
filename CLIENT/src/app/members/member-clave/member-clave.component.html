@@ -1,0 +1,26 @@
+<div class="row">
+     <div class="col-2"></div>
+
+     <div class="col-8">
+        <!-- <form #editForm="ngForm" id="editForm" (ngSubmit)="recuperarClave()">
+            <input class="form-control me-2" 
+            type="text" 
+            placeholder="Usuario"
+            name="Username"
+            [(ngModel)]="model.Username"
+            >
+        </form> -->
+        <form #editForm="ngForm" id="editForm" (ngSubmit)="recuperarClave()">
+            <input class="form-control me-2" 
+            type="text" 
+            placeholder="Usuario"
+            [(ngModel)]="insertClave" [ngModelOptions]="{standalone: true}"
+            >
+        </form>
+        <div class="card-footer">
+            <button form="editForm" type="submit" class="btn btn-success btn-block">Restablecer Clave</button>
+        </div>
+    </div> 
+
+    <div class="col-2"></div>
+</div>

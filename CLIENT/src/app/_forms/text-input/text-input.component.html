@@ -1,0 +1,25 @@
+<!-- clase 146 se trae el html del formulario de registro
+1. se cambia la referencia: type="password" por la interpolación type={{type}}  
+2. Se cambia formControlName="confirmPassword" por  [formControl]="controladorTextInput.control"
+3. se cambia  placeholder="Confirme Contraseña" por placeholder={{label}}>
+4. tambien se elimina las validación ngif de los div  de *ngIf="formularioRegistro.get('confirmPassword').hasError('required')" 
+  y se agrega   <div *ngIf= "controladorTextInput.control.errors?.required" class="invalid-feedback">Por favor entre {{label}}</div> 
+-->
+<div class="form-group">
+    <input [class.is-invalid]="controladorTextInput.touched && controladorTextInput.invalid"
+    type={{type}}
+     class="form-control" 
+     [formControl]="controladorTextInput.control"
+     placeholder={{label}}>
+    <div *ngIf="controladorTextInput.control.errors?.required" class="invalid-feedback">Por favor entre {{label}}</div>
+   
+    <div *ngIf="controladorTextInput.control.errors?.minlength" class="invalid-feedback">
+    {{label}} debe ser al menos {{controladorTextInput.control.errors.minlength['requiredLength']}}</div>
+  
+    <div *ngIf="controladorTextInput.control.errors?.maxlength" class="invalid-feedback">
+        {{label}} debe ser máximo {{controladorTextInput.control.errors.maxlength['requiredLength']}}</div>
+
+       <div *ngIf="controladorTextInput.control.errors?.isMatching" class="invalid-feedback">
+        las claves deben coincidir.
+    </div>
+</div>

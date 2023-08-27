@@ -1,0 +1,44 @@
+<!-- <p *ngFor="let item of mensajes">{{item.content}}</p> -->
+
+<div class="card">
+    <div class="card-body">
+        <div *ngIf="mensajesMemberMensaje.length === 0">
+            No mensajes aun .... say hi by using the message box below
+        </div>
+
+        <ul *ngIf="mensajesMemberMensaje.length > 0" class="chat">
+            <li *ngFor="let item of mensajesMemberMensaje">
+                <div>
+                    <span class="chat-img float-end">
+                        <img class="rounded-circle"
+                         src="{{item.senderPhotoUrl || './assets/user.png'}} "
+                          alt="imagen del usuario">
+                    </span>
+                    <div class="chat-body">
+                        <div class="header">
+                            <small class="text-muted">
+                                <span class="fa fa-clock-o">{{item.messageSent | timeago}}</span>
+                                <span class="text-danger"
+                                 *ngIf="!item.dateRead && item.senderUserName !== username">(No leido)</span>
+                                 <span class="text-success"
+                                 *ngIf="item.dateRead && item.senderUserName !== username">(Leido {{item.dateRead | timeago}})</span>
+                            </small>
+                        </div>
+                        <p>{{item.content}}</p>
+                    </div>
+                </div>
+                
+            </li>
+        </ul>
+    </div>
+    <div class="card-footer">
+        <form>
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" placeholder="Envia un mensaje privado">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
