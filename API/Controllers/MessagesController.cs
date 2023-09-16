@@ -79,5 +79,34 @@ namespace DatingApp_6.Controllers
             var currentUserName = User.GetUsername();
             return Ok(await _messageRepository.GetMessageThread(currentUserName, username));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMessage(int id)
+        {
+            var username = User.GetUsername();
+            var mensaje = await _messageRepository.GetMessage(id);
+
+            /* class 199 validamos que el remitente ni el destinatario sean igual al usario 
+             * logeado */
+            if (mensaje.SenderUsername != username && mensaje.RecipientUsername != username) 
+                return Unauthorized();
+
+            if(mensaje.SenderUsername.Equals(username)) mensaje.SenderDeleted = true;
+            if (mensaje.RecipientUsername.Equals(username)) mensaje.RecipientDeleted = true;
+
+            if (mensaje.SenderDeleted && mensaje.RecipientDeleted)
+            {
+                _messageRepository.DeleteMessage(mensaje);
+            }
+
+            if (await _messageRepository.SaveAllAsync())
+                return Ok();
+            
+                // return BadRequest("Problem deleting the message");
+             return Ok();
+            
+
+            
+        }
     }
 }

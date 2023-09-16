@@ -38,12 +38,12 @@ export class AccountService {
   
   /* clase 136 usaremos este método para configurar al usuario actual. se agrega aqui el localstorage del user */
   setCurrentUser(usuario:User){
-    localStorage.setItem("usuario2",JSON.stringify(usuario));
+    localStorage.setItem("usuario",JSON.stringify(usuario));
     this.currentUserSource.next(usuario);
   }
 
   logout(){
-    localStorage.removeItem('user');
+    localStorage.removeItem('usuario');
     this.currentUserSource.next(null);
   }
    register(model: any){

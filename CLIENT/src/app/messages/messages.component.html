@@ -36,7 +36,7 @@ not mensajes
             </tr>
         </thead>
         <tbody class="align-midle">
-            <tr *ngFor="let item of mensajesPadre"
+            <tr [hidden]="loading" *ngFor="let item of mensajesPadre"
              routerLink="{{container === 'Outbox' 
              ? '/members/'+item.recipientUsername
              : '/members/'+item.senderUsername}}">
@@ -54,15 +54,19 @@ not mensajes
                 </td>
                 <td style="width:20%">{{item.messageSent | timeago}}</td>
                 <td style="width:20%">
-                    <button class="btn btn-danger">Delete</button>
+                    <button (click)="$event.stopPropagation()" (click)="deleteMessage(item.id)" class="btn btn-danger">Delete</button>
                 </td>
             </tr>
         </tbody>
     </table>
+    
+    <ul *ngFor="let item of mensajesPadre">
+        <li item.id></li>
+    </ul>
 </div>
 
 
-<div class="d-flex justify-content-center" *ngIf="paginacion && mensajesPadre && mensajesPadre.length > 0">
+<div class="d-flex justify-content-center" *ngIf="!loading && paginacion && mensajesPadre && mensajesPadre.length > 0">
     <pagination [boundaryLinks]="true" 
     [totalItems]="paginacion.totalItems"
     [itemsPerPage]="paginacion.itemsPerPage"

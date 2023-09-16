@@ -34,8 +34,8 @@ ORDEN DE LLAMADO DE COMPOENTES
     mensajes: Message[] = [];
 
   /* clase 113 se agrega ngx-gallery para agregar foto */
-   galleryOptions: NgxGalleryOptions[];
-   galleryImages: NgxGalleryImage[];
+   galleryOptions: NgxGalleryOptions[] = [];
+   galleryImages: NgxGalleryImage[] = [];
 
 
   // messages: Message[] = [];
@@ -50,29 +50,25 @@ ORDEN DE LLAMADO DE COMPOENTES
        */
      //this.loadMember();
 
- 
     this.route.data.subscribe(
-      data => {this.member = data.member}
+      data => {this.member = data['member']}
     );
-
-    this.route.queryParamMap.subscribe(
-       param =>{
+    this.route.queryParams.subscribe(
+      param => {
         param['tab'] && this.selectTab(param['tab'])
       }
     );
-
-    // this.galleryOptions = [
-    //   {
-    //     width: '500px',
-    //     height: '500px',
-    //     imagePercent: 100,
-    //     thumbnailsColumns: 4,
-    //     imageAnimation: NgxGalleryAnimation.Slide,
-    //     preview: false
-    //   }
-    // ]
-    // this.galleryImages = this.getImages();
-    this.getImages();
+    this.galleryOptions = [
+      {
+        width: '500px',
+        height: '500px',
+        imagePercent: 100,
+        thumbnailsColumns: 4,
+        imageAnimation: NgxGalleryAnimation.Slide,
+        preview: false
+      }
+    ]
+    this.galleryImages = this.getImages();
   }
 /*  clase 113 se crea metodo que cargue las fotos */
   getImages(): NgxGalleryImage[]{
@@ -86,6 +82,7 @@ ORDEN DE LLAMADO DE COMPOENTES
     }
     return imageUrls;
   }
+
 
   /* clase 110 agrega metodo loadMemeber y la pasa como param de entrada el username en la 
   la llamada gethttp */

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Message } from 'src/app/_models/message';
+import { NgForm } from '@angular/forms';
 import { MessageService } from 'src/app/_services/message.service';
 
 @Component({
@@ -14,14 +15,23 @@ este component member-messages es hijo del member-detail*/
 export class MemberMessagesComponent implements OnInit {
    @Input() username? : string
   @Input() mensajesMemberMensaje : Message[] = [];
-
-  // messageContent: string;
+  @ViewChild('messageForm') messageForm: NgForm;
+  messageContent: string;
   // loading = false;
 
-  constructor() { }
+  constructor(private mensajeServicio:MessageService) { }
 
   ngOnInit(): void {
     
   }
 
+  sendMessage(){
+    if(!this.username) return;
+    this.mensajeServicio.sendMesage(this.username, this.messageContent).subscribe({
+        next: message => {
+          this.mensajesMemberMensaje.push(message);
+          this.messageForm.reset();
+        }
+    });
+  }
 }

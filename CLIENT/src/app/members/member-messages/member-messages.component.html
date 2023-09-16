@@ -17,11 +17,11 @@
                     <div class="chat-body">
                         <div class="header">
                             <small class="text-muted">
-                                <span class="fa fa-clock-o">{{item.messageSent | timeago}}</span>
+                                <span class="fa fa-clock-o">{{item.messageSent + 'Z' | timeago}}</span>
                                 <span class="text-danger"
                                  *ngIf="!item.dateRead && item.senderUserName !== username">(No leido)</span>
                                  <span class="text-success"
-                                 *ngIf="item.dateRead && item.senderUserName !== username">(Leido {{item.dateRead | timeago}})</span>
+                                 *ngIf="item.dateRead && item.senderUserName !== username">(Leido {{item.dateRead + 'Z' | timeago}})</span>
                             </small>
                         </div>
                         <p>{{item.content}}</p>
@@ -32,11 +32,17 @@
         </ul>
     </div>
     <div class="card-footer">
-        <form>
+        <form #messageform="ngForm" (ngSubmit)="sendMessage()" autocomplete="off">
             <div class="input-group">
-                <input type="text" class="form-control input-sm" placeholder="Envia un mensaje privado">
+                <input 
+                name="messageContent"
+                required
+                [(ngModel)]="messageContent"
+                type="text" 
+                class="form-control input-sm" 
+                placeholder="Envia un mensaje privado">
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Enviar</button>
+                    <button [disabled]="!messageform.valid" class="btn btn-primary" type="submit">Enviar</button>
                 </div>
             </div>
         </form>

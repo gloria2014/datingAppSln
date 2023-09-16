@@ -46,10 +46,14 @@ namespace DatingApp_6.Data
                 Sino (por default)_=>   -> se devolveran los mensajes no leidos */
             query = messageParams.Container switch
             {
-                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username),
-                "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username),
-                 _=> query.Where(u => u.RecipientUsername == messageParams.Username && u.DateRead == null),
+                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username && u.RecipientDeleted == false),
+                "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username && u.SenderDeleted == false),
+                 _=> query.Where(u => u.RecipientUsername == messageParams.Username && u.RecipientDeleted == false && u.DateRead == null)
             };
+           
+
+
+
             /* obtenemos la consulta depende de lo que el contenedor tenga, lo mandamos al MessageDto para devolverlo
              * como una lista paginada */
             var mensajes = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
@@ -70,8 +74,10 @@ namespace DatingApp_6.Data
                 .Include(u => u.Sender).ThenInclude(p => p.Photos)
                 .Include(u => u.Recipient).ThenInclude(p => p.Photos)
                 .Where(
-                    m => m.RecipientUsername == currentUserName && m.SenderUsername == recipientUserName
-                    || m.SenderUsername.Equals(currentUserName) && m.RecipientUsername.Equals(recipientUserName)
+                    m => m.RecipientUsername == currentUserName && m.RecipientDeleted == false
+                        && m.SenderUsername == recipientUserName
+                    || m.SenderUsername.Equals(currentUserName) 
+                    && m.RecipientUsername.Equals(recipientUserName) && m.SenderDeleted == false
                 )
                 .OrderBy(m => m.MessageSent)
                 .ToListAsync();

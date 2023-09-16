@@ -16,6 +16,7 @@ export class MessagesComponent implements OnInit {
  container = 'Unread';
  pageNumber = 1;
  pageSize = 5;
+ loading = false; // class 198 
 
   constructor(private mensajeServicio:MessageService) { }
 
@@ -23,13 +24,14 @@ export class MessagesComponent implements OnInit {
     this.loadMessages();
   }
   loadMessages(){
-
+    this.loading = true; /* cuando se llame por 1ra vez sera true */
     console.log('message.component.ts -> pageNumber : ' + this.pageNumber, 'pageSize : '+ this.pageSize);
     
     this.mensajeServicio.getMessages(this.pageNumber,this.pageSize,this.container).subscribe({
       next:response =>{
         this.mensajesPadre = response.result;
         this.paginacion = response.pagination;
+        this.loading = false;
       }
     });
   }
@@ -40,5 +42,11 @@ export class MessagesComponent implements OnInit {
       this.loadMessages();
     }
 
+  }
+
+  deleteMessage(id:number){
+    this.mensajeServicio.deleteMessage(id).subscribe({
+      next:()=> this.mensajesPadre?.splice(this.mensajesPadre.findIndex(m => m.id == id),1)
+    })
   }
 }
