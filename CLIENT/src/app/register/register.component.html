@@ -1,78 +1,15 @@
 
-<!-- clase 142  se remplaza la referencia "#registerForm="ngForm" por una propiedad 
-de entrada "[formGroup]="formularioRegistro" porque ahora estamos trabajando con formularios reactivos  
+    <form [formGroup]='formularioRegistro' (ngSubmit)="formularioRegistro.valid && register()" autocomplete="off">
+    <h2 class="text-center text-primary">Sign Up</h2>
+    <hr> 
 
-clase 146 se comenta todo losdiv form-group y se lleva la funcionalidad de validación al compomente text-input
--->
-<form [formGroup]="formularioRegistro" (click)="register()" autocomplete="off">
-    <h2 class="text-center text-primary">Registro</h2>
-    <hr>
-    <!-- <div class="form-group mb-2">
-        <input [class.is-invalid]="formularioRegistro.get('username').errors
-         && formularioRegistro.get('username').touched"
-         type="text" 
-         class="form-control" 
-         formControlName="username"
-         placeholder="Nombre Usuario">
-        <div class="invalid-feedback">Por favor ingrese usuario </div>
-    </div> -->
-
-    <!-- <div class="form-group" style="margin:.2em;">
-        <label>who is your favorite user?</label>
-        <select class="form-control">
-            <option *ngFor="let user of usersFromHomeComponent"
-             [value]="user.userName">{{user.userName}}</option>
-        </select>
-    </div> -->
-    <!-- <div class="btn-group" dropdown style="margin:.2em;"> 
-        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-                aria-controls="dropdown-basic">
-                your favorite user <span class="caret"></span>
-        </button>
-        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-            role="menu" aria-labelledby="button-basic">
-          <li role="menuitem"
-           *ngFor="let user of usersFromHomeComponent"[value]="user.userName">
-            <a class="dropdown-item">{{user.userName}}</a>
-          </li>
-        </ul>
-      </div> -->
-
-
-    <!-- <div class="form-group">
-        <input  [class.is-invalid]="formularioRegistro.get('password').errors
-        && formularioRegistro.get('password').touched"
-        type="password" 
-        class="form-control"
-         formControlName="password"
-         placeholder="Contraseña">
-         <div *ngIf="formularioRegistro.get('password').hasError('required')"
-         class="invalid-feedback">Por favor ingrese una contraseña</div>
-         <div *ngIf="formularioRegistro.get('password').hasError('minlength')"
-         class="invalid-feedback">Clave debe tener minímo 2 caracteres</div>
-         <div *ngIf="formularioRegistro.get('password').hasError('maxlength')"
-         class="invalid-feedback">Clave debe tener máximo 4 caracteres</div>
-    </div> -->
-    <!-- <div class="form-group">
-        <input [class.is-invalid]="formularioRegistro.get('confirmPassword').errors
-        && formularioRegistro.get('confirmPassword').touched"
-        type="password"
-         class="form-control" 
-         formControlName="confirmPassword"
-         placeholder="Confirme Contraseña">
-         <div *ngIf="formularioRegistro.get('confirmPassword').hasError('required')"
-         class="invalid-feedback">Por favor ingrese Confirmar contraseña</div>
-         <div *ngIf="formularioRegistro.get('confirmPassword').hasError('coincidirCon')"
-         class="invalid-feedback">Claves deben coincidir</div>
-    </div> -->
-
-    <div class="form-group">
-        <label class="control-label" style="margin-right:10px;">Soy: </label>
-        <label class="radio-inline">
-            <input type="radio" value="male" formControlName="gender">Hombre
+    <div class="mb-3">
+        <label style="margin-right: 10px;">I am a: </label>
+        <label class="form-check-label">
+            <input class="form-check-input" type="radio" value='male' formControlName='gender'> Male
         </label>
-        <label class="radio-inline">
-            <input type="radio" value="female" formControlName="gender">Mujer
+        <label class="form-check-label">
+            <input type="radio" value='female' formControlName='gender' class="form-check-input ms-3"> Female
         </label>
     </div>
 
@@ -106,14 +43,12 @@ clase 146 se comenta todo losdiv form-group y se lleva la funcionalidad de valid
         </ul>
    </div>
 
-    <div class=" form-group text-center">
-       <button class="btn btn-success" [disabled]="!formularioRegistro.valid"
-            style="margin:.2em;" type="submit"
-       >Registrar</button>
-       <button class="btn btn-default" style="margin:.2em;" type="button" (click)="cancel()">Cancelar</button>
+
+    <div class="form-group text-center">
+        <button [disabled]='!formularioRegistro.valid' class="btn btn-success mr-2" type="submit">Register</button>
+        <button class="btn btn-default mr-2" (click)="cancel()" type="button">Cancel</button>
     </div>
 </form>
 
-<!-- clase 142 usaremos la interpolacion para mostrar lo que trae el form en formato json -->
-<p> form value: {{formularioRegistro.value | json }}</p>
-<p> form status : {{formularioRegistro.status | json }}</p>
+<!-- <p> form value: {{formularioRegistro.value | json }}</p>
+<p> form status : {{formularioRegistro.status | json }}</p> -->

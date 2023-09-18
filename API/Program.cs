@@ -1,10 +1,9 @@
 using DatingApp_6.Data;
+using DatingApp_6.Entities;
 using DatingApp_6.Extensions;
 using DatingApp_6.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,22 +15,13 @@ builder.Services.AddIdentityServices(builder.Configuration);
 
 
 
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-/*  lesson 78 .- se comenta  app.Environment.IsDevelopment() */
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-//app.UseMiddleware<ExceptionMiddleware>();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseRouting();
@@ -40,22 +30,32 @@ app.UseCors(x => x.AllowAnyHeader()
 .AllowCredentials()
 .WithOrigins("https://localhost:4200"));
 
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 
-//AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-// leccion 90 se crea un alcance para los servicios que vamos a crear
 using var scope = app.Services.CreateScope();
-// guardamos los servicios como proveedor de servicios
+
 var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
+
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();/* class 207 se agrega esra linea*/
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+
     await context.Database.MigrateAsync();
-    await Seed.SeedUsers(context);
+
+    await Seed.SeedUsers(userManager, roleManager);
 }
 catch (Exception ex)
 {

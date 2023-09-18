@@ -14,38 +14,30 @@ import { MessagesComponent } from './messages/messages.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChangesGuardGuard } from './_guards/prevent-unsaved-changes-guard.guard';
 import { MemberDetailedResolver } from './_resolvers/member-detailed.resolver';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { AdminGuard } from './_guards/admin.guard';
 
 
 const routes: Routes = [
-  /* para el inicio el path es vacio y se irá al componente Home*/
   {path:'', component:HomeComponent},
-
-  /* lesson 71 aca se agrega una ruta ficticia que contendrá las rutas hijos
-  esto con el fin de protegerlos con un solo guardia */
   {path:'',
   runGuardsAndResolvers:'always',
   canActivate:[AuthGuard],
   children:[
     {path:'members', component:MemberListComponent}
     ,{path:'members/:username', component: MemberDetailComponent, resolve:{member:MemberDetailedResolver}}
-    /* clase 116 se agrega la ruta para editar dentro de las rutas protegidas*/
-    /* clase 119 se agrega "canDeactive" para controlar la activacion y desactivacion del componente MemberEditComponent */
     ,{path:'member/edit',component:MemberEditComponent, canDeactivate:[PreventUnsavedChangesGuardGuard]}
     ,{path:'lists', component:ListsComponent}
     ,{path:'messages', component:MessagesComponent}
+    ,{path:'admin',component:AdminPanelComponent, canActivate:[AdminGuard]}
   ]
   },
-  /* lesson 79 aca se agrega la ruta para llegar a los errores */
+
   {path:'errors', component:TestErrorsComponent},
   {path:'not-found', component:NotFoundComponent},
   {path:'server-error', component:ServerErrorComponent},
   {path:'member/clave',component:MemberRecuperaClaveComponent},
-  
-  /* cuado el usuario escribe cualquier cosa menos una de las rutas que estan definidas aqui, 
-  el sistema lo redirecciona al home */
-
-  // {path:'**', component:HomeComponent, pathMatch:'full'}
-   {path:'**', component:NotFoundComponent, pathMatch:'full'}
+  {path:'**', component:NotFoundComponent, pathMatch:'full'}
 ];
 
 @NgModule({

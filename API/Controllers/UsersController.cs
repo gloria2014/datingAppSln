@@ -14,10 +14,7 @@ using System.Security.Claims;
 
 namespace DatingApp_6.Controllers
 {
-    /*
-     clase 91 , se comenta los atributos de autorize y allowanonymous para agregar el atrinbuto authorize a nivel
-     de clase, esto significa que todos los métodos dej esta clase estan protegidos con autorización
-        */
+    
     [Authorize]
     public class UsersController  : BaseApiController
     {
@@ -25,7 +22,6 @@ namespace DatingApp_6.Controllers
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
 
-        /* clase 94 en el contructor se remplaza la inyección del dataContext por IUserRepository */
         public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService)
         {
             _userRepository = userRepository;
@@ -34,40 +30,6 @@ namespace DatingApp_6.Controllers
         }
 
         [HttpGet]
-        //[AllowAnonymous]
-        //public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
-        //{
-        //    // return await _context.Users.ToListAsync();
-        //    try
-        //    {
-        //        var usuario = await _userRepository.GetMembersAsnyc(); //GetUsersAsync();
-        //       // var userToReturn = _mapper.Map<IEnumerable<MemberDto>>(usuario);
-        //        return Ok(usuario);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex.InnerException;
-        //    }
-        //}
-        /*  clase 155 comemtamos el método de arriba "GetUsers()" porque se modfica */
-
-        //public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers_original([FromQuery] UserParams parametros)
-        //{ // en la clase 159 se agregga otras validaciones al me´todo GetUsers
-        //    try
-        //    {
-        //        var lstPaginada = await _userRepository.GetMembersAsnyc(parametros);
-
-        //        Response.AddPaginationHeader(lstPaginada.CurrentPage, lstPaginada.PageSize,
-        //            lstPaginada.TotalCount, lstPaginada.TotalPages);
-
-        //        return Ok(lstPaginada);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex.InnerException;
-        //    }
-        //}
-
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams parametros)
         {
             try
@@ -94,20 +56,14 @@ namespace DatingApp_6.Controllers
         }
 
 
-
-        //[Authorize] /* clase 131 agregamos otro parametro Name que será la ruta  */
         [HttpGet("{username}",Name = "GetUser")]
-        //public async Task<ActionResult<MemberDto>> GetUserByUserNameAsync(string username)
-        //{
-        //   var user = await _userRepository.GetUserByUserNameAsync(username);
-        //    return _mapper.Map<MemberDto>(user);
-        //}
+
         public async Task<ActionResult<MemberDto>> GetUser (string username)
         {
             return await _userRepository.GetMemberAsnyc(username);
         }
 
-        /* clase 120 crea el método UpdateUser() */
+
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
@@ -130,7 +86,7 @@ namespace DatingApp_6.Controllers
             return BadRequest();
         }
 
-        /* clase 165 aca hago un stop para crear el metodo que recupera clave */
+
         [HttpPut("recuperaClave")]
         public async Task<ActionResult> RecuperaClave(MemberUpdateDto memberUpdateDto)
         {
@@ -145,7 +101,7 @@ namespace DatingApp_6.Controllers
             return BadRequest();
         }
 
-        /* clase 129 se crea método para cargar foto */
+
         [HttpPost("add-photo")]
         public async Task<ActionResult<PhotoDto>> AddPhoto (IFormFile file)
         {
@@ -177,7 +133,7 @@ namespace DatingApp_6.Controllers
             return BadRequest("problem adding photo");
         }
 
-        /* clase 135 se crea metodo para setear una foto como main de la lista de fotos  */
+
         [HttpPut("set-main-photo/{photoId}")]
         public async Task<ActionResult> SetMainPhoto(int photoId)
         {
@@ -203,8 +159,6 @@ namespace DatingApp_6.Controllers
         }
 
 
-        /*  clase 138 se agrega método  DeletePhoto de tarea asyncrono
-         *  y se le envia la ruta "delete-photo/{photoId}" */
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<ActionResult> DeletePhoto(int photoId)
         {

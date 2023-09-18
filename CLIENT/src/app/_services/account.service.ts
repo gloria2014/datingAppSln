@@ -12,11 +12,8 @@ import { User } from '../_models/user';
 export class AccountService {
   baseUrl = environment.apiUrl; //"https://localhost:7071/";
 
-  /* se obtiene datos del usuario en observable currentUserSource  */
   private currentUserSource = new ReplaySubject<User>(1);
   
-  /*currentUser$ cuando hay un signo dolar delante de la variable significa 
-  que recibirá datos de un observable*/
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(private http:HttpClient) { }
@@ -26,21 +23,22 @@ export class AccountService {
       map((response: User)=>{
         const user = response;
         if(user){
-          // this.currentUserSource.next(user);
-          /* clase 136 se cambia la llamada a est afuncion -> setCurrentUser() */
           this.setCurrentUser(user);
-          console.log("accountService/login :::: " + JSON.stringify(user));
           
         }
       })
     );
   }
   
-  /* clase 136 usaremos este método para configurar al usuario actual. se agrega aqui el localstorage del user */
-  setCurrentUser(usuario:User){
-    localStorage.setItem("usuario",JSON.stringify(usuario));
-    this.currentUserSource.next(usuario);
+
+  setCurrentUser(user: User) {
+    user.roles = [];
+    const roles = this.getDecodedToken(user.token).role;
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUserSource.next(user);
   }
+
 
   logout(){
     localStorage.removeItem('usuario');
@@ -49,14 +47,16 @@ export class AccountService {
    register(model: any){
       return this.http.post(this.baseUrl+"account/register",model).pipe(
         map((usuario: User)=>{
-          if(usuario){
-             // this.currentUserSource.next(usuario);
-               /* clase 136 se comenta la linea de arriba y se cambia la llamada a est afuncion -> setCurrentUser() */
-          this.setCurrentUser(usuario);
+          if(usuario){            
+              this.setCurrentUser(usuario);
           }
           return usuario;
         })
       )
    }
+
+   getDecodedToken(token) {
+    return JSON.parse(atob(token.split('.')[1]));
+  }
 
 }
