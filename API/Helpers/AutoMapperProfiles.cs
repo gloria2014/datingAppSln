@@ -29,15 +29,16 @@ namespace DatingApp_6.Helpers
             /* clase 150 se mapea de registroDto a Apuser*/
             CreateMap<RegisterDto, AppUser>();
 
-            /* class 183 - el automapper es una herramienta que permite pasar informacion de un objetoa otro
-             * en este caso, el método CreateMap<origen, destino>() donde ForMemeber es un método
-             * de auto mapper y mediante expresion lambda donde, el primer parametro es el destino y el segundo es el origen
-             *   - el método MapFrom() indica de donde viene la solicitud, ese valor irá al destino  */
-            CreateMap<Message, MessageDto>()
+             CreateMap<Message, MessageDto>()
                 .ForMember(dest => dest.SenderPhotoUrl,
                 opt => opt.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
                 .ForMember(dest => dest.RecipientPhotoUrl,
                 opt => opt.MapFrom(s => s.Recipient.Photos.FirstOrDefault(x => x.IsMain).Url));
+        
+              CreateMap<DateTime,DateTime>().ConstructUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
+            CreateMap<DateTime?, DateTime?>().ConvertUsing(d => d.HasValue ?
+                DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) 
+                : null);
         }
     }
 }

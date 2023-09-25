@@ -19,6 +19,12 @@ namespace DatingApp_6.Data
             _context = context;
             _mapper = mapper;
         }
+
+        public void AddGroup(Group group)
+        {
+            _context.groups.Add(group);
+        }
+
         public void AddMessage(Message message)
         {
             _context.Messages.Add(message);
@@ -27,6 +33,19 @@ namespace DatingApp_6.Data
         public void DeleteMessage(Message message)
         {
             _context.Messages.Remove(message);
+        }
+
+        public async Task<Connection> GetConnection(string connectoinId)
+        {
+            return await _context.Connections.FindAsync(connectoinId);
+        }
+
+        public async Task<Group> GetGroupForConnection(string connectionId)
+        {
+            return await _context.groups
+                .Include(x => x.Connections)
+                .Where(x => x.Connections.Any(c => c.ConnectionId == connectionId))
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Message> GetMessage(int id)
@@ -66,6 +85,12 @@ namespace DatingApp_6.Data
         
         }
 
+        public async Task<Group> GetMessageGroup(string groupName)
+        {
+            return await _context.groups
+                .Include(x => x.Connections)
+                .FirstOrDefaultAsync(x => x.Name == groupName);
+        }
 
         public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string recipientUserName)
         {
@@ -98,6 +123,11 @@ namespace DatingApp_6.Data
             await _context.SaveChangesAsync();
 
             return _mapper.Map<IEnumerable<MessageDto>>(mensajes);
+        }
+
+        public  void RemoveConnection(Connection connection)
+        {
+           _context.Connections.Remove(connection);
         }
 
         //public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string recipientUserName)

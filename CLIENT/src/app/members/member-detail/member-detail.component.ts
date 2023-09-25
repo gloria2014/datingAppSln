@@ -1,11 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
+import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
 import { Message } from 'src/app/_models/message';
+import { User } from 'src/app/_models/user';
+import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 import { MessageService } from 'src/app/_services/message.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 
 @Component({
@@ -22,34 +26,31 @@ ORDEN DE LLAMADO DE COMPOENTES
  2-> member-detail.ts(carga lista de mesnajes de un usuario) 
  3-> member-messages.ts(es la vista final) */
 
- export class MemberDetailComponent implements OnInit {
+ export class MemberDetailComponent implements OnInit, OnDestroy {
     /* class 194 - se agrega una variable de referencia '#memberTabs' en su html y 
     que viene hacer el hijo de este componente. Luego creo el método 'onTabActivated()' */
 
     @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
 
-    member: Member;// = {} as Member; // | undefined;
-    // images: galleryItem[] = [] no se encuentresta solo en el ejemplo video
+    member: Member;
     activeTab: TabDirective;
     mensajes: Message[] = [];
 
-  /* clase 113 se agrega ngx-gallery para agregar foto */
    galleryOptions: NgxGalleryOptions[] = [];
    galleryImages: NgxGalleryImage[] = [];
+  usuario?: User;
 
-
-  // messages: Message[] = [];
-
-  constructor(private memberService:MembersService, 
-    private messageService: MessageService, 
-  private route:ActivatedRoute) { }
+  constructor(private accountService:AccountService, 
+    private messageService: MessageService, public presenceService:PresenceService,
+  private route:ActivatedRoute) { 
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user =>{
+        if(user) this.usuario = user;
+      }
+    })
+  }
 
   ngOnInit(): void {
-    /* class 196 - en esta clase se agrega el resolver(los resolver estan asociados 
-      con las paths) Entonces, aqui comentamos el loadMember porque usaremos el resolver MemberDetailedResolver
-       */
-     //this.loadMember();
-
     this.route.data.subscribe(
       data => {this.member = data['member']}
     );
@@ -70,6 +71,11 @@ ORDEN DE LLAMADO DE COMPOENTES
     ]
     this.galleryImages = this.getImages();
   }
+
+  ngOnDestroy(): void {
+    this.messageService.stopHubConnection();
+  }
+
 /*  clase 113 se crea metodo que cargue las fotos */
   getImages(): NgxGalleryImage[]{
     const imageUrls = [];
@@ -83,32 +89,28 @@ ORDEN DE LLAMADO DE COMPOENTES
     return imageUrls;
   }
 
+  // loadMember(){ 
+  //   console.log("entre loadMember");
+  //   const username = this.route.snapshot.paramMap.get('username');
+  //   if(!username) return;
 
-  /* clase 110 agrega metodo loadMemeber y la pasa como param de entrada el username en la 
-  la llamada gethttp */
+  //     this.memberService.getMember(username)
+  //     .subscribe({
+  //       next:member => {
+  //         this.member = member;
+  //         /* clase 113 se agrega aca el llamado a la carga de las fotos */
+  //         this.getImages();
+  //       }
+  //     })
+  //  }
 
-  /* loadMemeber ya no se usa, se remplaza poor el resolver*/
-  loadMember(){ 
-    console.log("entre loadMember");
-    const username = this.route.snapshot.paramMap.get('username');
-    if(!username) return;
-
-      this.memberService.getMember(username)
-      .subscribe({
-        next:member => {
-          this.member = member;
-          /* clase 113 se agrega aca el llamado a la carga de las fotos */
-          this.getImages();
-        }
-      })
-   }
-
-   /* class 194 se crea este metodo para que solo se active cuando hace clic en la pestaña Messages.
-    se busca por su propiedad heading 'Messages' del html */
     onTabActivated(data : TabDirective){
       this.activeTab = data;
-      if(this.activeTab.heading === 'Messages'){
-          this.loadMessages();
+      if(this.activeTab.heading === 'Messages' && this.usuario){
+          //this.loadMessages();
+          this.messageService.createHubConnection(this.usuario, this.member.username);
+      }else{
+        this.messageService.stopHubConnection();
       }
    }
 
@@ -121,7 +123,7 @@ ORDEN DE LLAMADO DE COMPOENTES
     }
   }
   
-/*  class 195 se crea este metdo selectTab() */
+
   selectTab(heading:string){
     if(this.memberTabs){
       this.memberTabs.tabs.find(x => x.heading == heading)!.active = true;

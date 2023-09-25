@@ -14,24 +14,23 @@ import { MessageService } from 'src/app/_services/message.service';
 este component member-messages es hijo del member-detail*/
 export class MemberMessagesComponent implements OnInit {
    @Input() username? : string
-  @Input() mensajesMemberMensaje : Message[] = [];
-  @ViewChild('messageForm') messageForm: NgForm;
-  messageContent: string;
-  // loading = false;
 
-  constructor(private mensajeServicio:MessageService) { }
+  // @Input() mensajesMemberMensaje : Message[] = []; se elimina porque se usa el signalR / hub
+  @ViewChild('messageForm') messageForm: NgForm;
+
+  messageContent: string;
+
+  constructor(public mensajeServicio:MessageService) { }
 
   ngOnInit(): void {
     
   }
-
+  
   sendMessage(){
     if(!this.username) return;
-    this.mensajeServicio.sendMesage(this.username, this.messageContent).subscribe({
-        next: message => {
-          this.mensajesMemberMensaje.push(message);
-          this.messageForm.reset();
-        }
-    });
+    this.mensajeServicio.sendMessage(this.username, this.messageContent).then(() => {
+        this.messageForm?.reset();
+      }
+    );
   }
 }

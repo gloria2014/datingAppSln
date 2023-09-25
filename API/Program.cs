@@ -2,6 +2,7 @@ using DatingApp_6.Data;
 using DatingApp_6.Entities;
 using DatingApp_6.Extensions;
 using DatingApp_6.Middleware;
+using DatingApp_6.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +42,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<PresenceHub>("hubs/presence"); /* endpoint para el hub*/
+app.MapHub<MessageHub>("hubs/message");
 
 using var scope = app.Services.CreateScope();
 
@@ -54,6 +56,9 @@ try
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 
     await context.Database.MigrateAsync();
+
+    // context.Connections.RemoveRange(context.Connections);
+    await context.Database.ExecuteSqlRawAsync("DELETE FROM [Connections]");
 
     await Seed.SeedUsers(userManager, roleManager);
 }

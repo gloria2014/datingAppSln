@@ -165,6 +165,34 @@ namespace DatingApp_6.Data.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("DatingApp_6.Entities.Connection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("GroupName");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("DatingApp_6.Entities.Group", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("groups");
+                });
+
             modelBuilder.Entity("DatingApp_6.Entities.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -358,6 +386,13 @@ namespace DatingApp_6.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DatingApp_6.Entities.Connection", b =>
+                {
+                    b.HasOne("DatingApp_6.Entities.Group", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("GroupName");
+                });
+
             modelBuilder.Entity("DatingApp_6.Entities.Message", b =>
                 {
                     b.HasOne("DatingApp_6.Entities.AppUser", "Recipient")
@@ -461,6 +496,11 @@ namespace DatingApp_6.Data.Migrations
                     b.Navigation("Photos");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("DatingApp_6.Entities.Group", b =>
+                {
+                    b.Navigation("Connections");
                 });
 #pragma warning restore 612, 618
         }
