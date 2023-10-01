@@ -61,6 +61,20 @@ namespace DatingApp_6.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 
